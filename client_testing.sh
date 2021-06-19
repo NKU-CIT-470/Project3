@@ -22,8 +22,8 @@ overload_cpu_test () { echo "Testing CPU usage..." && stress --vm-bytes 256M --c
 #Test to overload Mem with stress tool
 overload_mem_test () { echo "Testing memory usage..." && stress --vm 1 --vm-bytes  3500M --timeout 45s >& 1 >> /var/log/client-testing.log && monit summary | grep localhost && echo "Mem testing complete!" }
 
-#Test hard drive
-hard_drive_test () { echo "Testing disk usage.." && dd if=/dev/zero of=/dev/diskhog bs=1M count=100000 2>&1 >> /var/log/client-testing.log && sleep 60 && monit summary | grep Home && monit summary | grep Root && monit summary | grep Var && rm /dev/diskhog -f >& 1 >> /var/log/client-testing.log && echo "Disk usage testing complete!" }
+#Test dir and fs
+dir_fs_test () { echo "Testing disk usage.." && dd if=/dev/zero of=/dev/diskhog bs=1M count=100000 2>&1 >> /var/log/client-testing.log && sleep 60 && monit summary | grep Home && monit summary | grep Root && monit summary | grep Var && rm /dev/diskhog -f >& 1 >> /var/log/client-testing.log && echo "Disk usage testing complete!" }
 
 # Run tests
-kill_ssh_test && kill_nfs_test && kill_ldap_test && kill_syslog_test && overload_cpu_test && overload_mem_test && hard_drive_test
+kill_ssh_test && kill_nfs_test && kill_ldap_test && kill_syslog_test && overload_cpu_test && overload_mem_test && dir_fs_test
