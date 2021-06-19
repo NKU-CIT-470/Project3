@@ -17,7 +17,7 @@ kill_ldap_test () { echo "Testing LDAP server..." && systemctl stop slapd && sle
 kill_syslog_test () { echo "Testing syslog..." && systemctl stop rsyslog && sleep 120 && monit summary | grep rsyslog }
 
 #Test to overload CPU with stress tool
-overload_cpu_test () { echo "Testing CPU usage..." && stress --vm-bytes 256MB --cpu 100 --timeout 60s >& 1 >> /var/log/server-testing.log && monit summary | grep localhost && echo "CPU and MEM testing complete!" }
+overload_cpu_test () { echo "Testing CPU usage..." && stress --vm-bytes 256M --cpu 100 --timeout 60s >& 1 >> /var/log/server-testing.log && monit summary | grep localhost && echo "CPU and MEM testing complete!" }
 
 #Test to overload Mem with stress tool
 overload_mem_test () { echo "Testing memory usage..." && stress --vm 1 --vm-bytes  3500M --timeout 45s >& 1 >> /var/log/server-testing.log && monit summary | grep localhost && echo "Mem testing complete!" }
