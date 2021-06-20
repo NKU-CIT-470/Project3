@@ -1,0 +1,27 @@
+#! /bin/bash
+
+## initialize log file
+touch monit-install-log
+
+##install prerequisite software
+yum install epel-release monit -y | tee -a monit-install-log
+## download monitrc config file
+wget https://raw.githubusercontent.com/replogler2/Project3/78cf3f4f32ba6dac2230b432d9ef8f565e691be1/monitrc-client | tee -a monit-install-log
+## rename monitrc file for client
+cp monitrc-client monitrc | tee -a monit-install-log
+## remove template monitrc file from server
+rm /etc/monitrc | tee -a monit-install-log
+## move monitrc to /etc folder
+cp monitrc /etc/ | tee -a monit-install-log
+## restart monit service
+echo "Restart monit service" | tee -a /root/conf-monit-log.txt
+/usr/bin/systemctl start monit
+/usr/bin/systemctl enable monit
+#Firewall configuring
+firewall-cmd --zone=public --add-port=25/tcp --permanent | tee -a monit-install-log
+firewall-cmd --zone=public --add-port=25/udp --permanent | tee -a monit-install-log
+firewall-cmd --zone=public --add-port=514/tcp --permanent | tee -a monit-install-log
+firewall-cmd --zone=public --add-port=514/udp --permanent | tee -a monit-install-log
+firewall-cmd --zone=public --add-port=2812/tcp --permanent | tee -a monit-install-log
+firewall-cmd --zone=public --add-port=2812/udp --permanent | tee -a monit-install-log
+firewall-cmd --reload | tee -a monit-install-log
