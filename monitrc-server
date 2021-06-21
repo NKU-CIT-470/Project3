@@ -241,8 +241,8 @@ check process sshd with pidfile /var/run/sshd.pid
 
 # Monit NFS Server Monitoring
 check process NFS with pidfile /var/run/rpc.statd.pid
-        start program = "/usr/bin/systemctl start nfs nfslock"
 #  	start program = "/usr/bin/systemctl start nfs.service"
+        start program = "/usr/bin/systemctl start nfs nfslock"
         stop program  = "/usr/bin/systemctl stop nfs nfslock"
 #  	stop program  = "/usr/bin/systemctl stop nfs.service"
   	if failed host 127.0.0.1 port 2049 type tcp for 2 cycles then restart
@@ -386,3 +386,4 @@ check process httpd with pidfile /var/run/httpd/httpd.pid
 #
 include /etc/monit.d/*
 #
+
