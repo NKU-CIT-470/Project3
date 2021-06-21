@@ -1,10 +1,17 @@
 #Group Project 3
+
 #Monit Configuration
+
 #CIT 470-001
+
 #Instructor: Darci Guriel
+
 #Group: 1
+
 #Members:
+
 #Dan Jones, Rick Replogle, Ryan Williams
+
 #06/21/2021
 
 
