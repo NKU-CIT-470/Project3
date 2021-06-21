@@ -1,7 +1,5 @@
 #Group Project 3
-
 #Monit Configuration
-
 #CIT 470-001
 
 #Instructor: Darci Guriel
