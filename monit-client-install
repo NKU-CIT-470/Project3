@@ -4,10 +4,10 @@
 touch monit-install-log
 
 ##install prerequisite software
-yum install epel-release monit -y | tee -a monit-install-log
+yum install epel-release -y | tee -a monit-install-log
+yum install monit -y | tee -a monit-install-log
 ## download monitrc config file
-wget https://raw.githubusercontent.com/NKU-CIT-470/Project3/main/monitrc-client | tee -a monit-install-log
-#https://raw.githubusercontent.com/replogler2/Project3/78cf3f4f32ba6dac2230b432d9ef8f565e691be1/monitrc-client #tmp file 
+wget https://github.com/NKU-CIT-470/Project3/raw/main/monitrc-client | tee -a monit-install-log
 ## rename monitrc file for client
 cp monitrc-client monitrc | tee -a monit-install-log
 ## remove template monitrc file from server
