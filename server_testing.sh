@@ -32,5 +32,6 @@ overload_mem_test () { echo "Testing memory usage..." && stress --vm 1 --vm-byte
 dir_fs_test () { echo "Testing disk usage.." && dd if=/dev/zero of=/dev/diskhog bs=1M count=1850 >&1 >> /var/log/server-testing.log && sleep 60 && rm /dev/diskhog -f >& 1 >> /var/log/server-testing.log
 echo "Cleaning up disk testing" && sleep 60 && monit summary | grep home && monit summary | grep root && monit summary | grep dev && rm /dev/diskhog -f >& 1 >> /var/log/server-testing.log && echo "Disk usage testing complete!"
 }
+
 # test to see if overwrite works# Run tests
 kill_ssh_test && kill_nfs_test && kill_ldap_test && kill_syslog_test && overload_mem_test && overload_cpu_test && dir_fs_test
