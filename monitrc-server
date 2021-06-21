@@ -233,6 +233,9 @@ check system 10.2.7.65
 check device home with path /home
 	if space usage > 80% then alert
 
+check device dev with path /dev
+	if space usage > 80% then alert
+
 check process sshd with pidfile /var/run/sshd.pid
 	start program "/usr/bin/systemctl start sshd.service"
 	stop program "/usr/bin/systemctl stop sshd.service"
