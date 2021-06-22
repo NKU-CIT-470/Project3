@@ -337,14 +337,20 @@ check host server with address SERVER_IP
 #Checking HOME dir
 check filesystem home with path /home
    if space usage > 70% for 3 times within 5 cycles then alert
+   if does not exist then exec "/bin/mount /home"
+   if does not exist for 5 cycles then alert
 
 #Checking VAR dir
 check filesystem var with path /var
    if space usage > 70% for 3 times within 5 cycles then alert
+   if does not exist then exec "/bin/mount /var"
+   if does not exist for 5 cycles then alert
 
 #Checking ROOT dir
 check filesystem root with path /
    if space usage > 70% for 3 times within 5 cycles then alert
+   if does not exist then exec "/bin/mount /"
+   if does not exist for 5 cycles then alert
 
 #Check client load
 check system localhost
