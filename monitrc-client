@@ -317,12 +317,6 @@ check process SSH with pidfile /var/run/sshd.pid
    if failed port 22 protocol ssh then restart
    if 5 restarts within 5 cycles then timeout
 
-#Check status NFS and mount /home on server. timeout if 5 restarts in 5 cycles
-check process nfs with pidfile /var/run/rpc.statd.pid
-  start program = "/usr/bin/systemctl start rpcbind"
-  stop program = "/usr/bin/systemctl stop rpcbind"
-  if 5 restarts within 5 cycles then timeout
-
 #Check ldap process and make sure is running
 check process ldap with pidfile /var/run/nslcd/nslcd.pid
    start program = "/usr/bin/systemctl start nslcd"
@@ -330,13 +324,14 @@ check process ldap with pidfile /var/run/nslcd/nslcd.pid
    if 5 restarts within 5 cycles then alert
 
 #Checking for ports and server statuses
-check host server with address 10.2.7.66
+check host server with address SERVER_IP
   if failed ping then alert
   if failed port 111 timeout 10 seconds then alert
   if failed port 20048 timeout 10 seconds then alert
   if failed port 2049 timeout 10 seconds then alert
   if failed port 389 timeout 10 seconds then alert
   if failed port 514 timeout 10 seconds then alert
+  if failed port 22 protocol ssh timeout 10 seconds then alert
 
 #Checking filesystems
 #Checking HOME dir
@@ -350,3 +345,11 @@ check filesystem var with path /var
 #Checking ROOT dir
 check filesystem root with path /
    if space usage > 70% for 5 times within 3 cycles then alert
+
+#Check client load
+check system localhost
+   if loadavg (1min) per core > 2 for 5 cycles then alert
+   if loadavg (5min) per core > 1.5 for 10 cycles then alert
+   if cpu usage > 90% for 5 cycles then alert
+   if memory usage > 80% then alert
+   if swap usage > 80% then alert

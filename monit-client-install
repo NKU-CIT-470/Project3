@@ -1,5 +1,13 @@
 #! /bin/bash
 
+#Validate server IP address
+if [[ $1 =~ ^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])$ ]]; then 
+	echo "Valid IP address"
+else
+	echo "Invalid IP address"
+	exit
+fi 
+
 ## initialize log file
 touch monit-install-log
 
@@ -8,12 +16,8 @@ yum install epel-release -y | tee -a monit-install-log
 yum install monit -y | tee -a monit-install-log
 ## download monitrc config file
 wget https://github.com/NKU-CIT-470/Project3/raw/main/monitrc-client | tee -a monit-install-log
-## rename monitrc file for client
-cp monitrc-client monitrc | tee -a monit-install-log
-## remove template monitrc file from server
-rm /etc/monitrc | tee -a monit-install-log
-## move monitrc to /etc folder
-cp monitrc /etc/ | tee -a monit-install-log
+#Search for string in monitrc and replace it with the server IP then save it over the template
+sed "s/SERVER_IP.*/"$1"/g" monitrc-client > monit-test
 ## restart monit service
 echo "Restart monit service" | tee -a /root/conf-monit-log.txt
 /usr/bin/systemctl start monit
