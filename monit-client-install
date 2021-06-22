@@ -1,32 +1,27 @@
 #! /bin/bash
-
 #Validate server IP address
-if [[ $1 =~ ^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])$ ]]; then 
+if [[ $1 = -h ]]; then
+	echo "This command is used to configure a monit service between a server and a client\n The script requires two inputs the first is the servers IP address and the second is the clients IP address"
+elif [[ $1 =~ ^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])$ ]] && [[ $2 =~ ^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])$ ]]; then 
 	echo "Valid IP address"
 else
 	echo "Invalid IP address"
 	exit
 fi 
-
 ## initialize log file
 touch monit-install-log
-
 ##install prerequisite software
 yum install epel-release -y | tee -a monit-install-log
 yum install monit -y | tee -a monit-install-log
 ## download monitrc config file
 wget https://github.com/NKU-CIT-470/Project3/raw/main/monitrc-client | tee -a monit-install-log
 #Search for string in monitrc and replace it with the server IP then save it over the template
-sed "s/SERVER_IP.*/"$1"/g" monitrc-client > /etc/monitrc
+sed "s/SERVER_IP.*/"$1"/g" monitrc-client > monitrc1
+sed "s/CLIENT_IP.*/"$2"/g" monitrc1 > /etc/monitrc
+rm -f monitrc1
 ## restart monit service
 echo "Restart monit service" | tee -a /root/conf-monit-log.txt
 /usr/bin/systemctl start monit
 /usr/bin/systemctl enable monit
 #Firewall configuring
-firewall-cmd --zone=public --add-port=25/tcp --permanent | tee -a monit-install-log
-firewall-cmd --zone=public --add-port=25/udp --permanent | tee -a monit-install-log
-firewall-cmd --zone=public --add-port=514/tcp --permanent | tee -a monit-install-log
-firewall-cmd --zone=public --add-port=514/udp --permanent | tee -a monit-install-log
-firewall-cmd --zone=public --add-port=2812/tcp --permanent | tee -a monit-install-log
-firewall-cmd --zone=public --add-port=2812/udp --permanent | tee -a monit-install-log
-firewall-cmd --reload | tee -a monit-install-log
+firewall-cmd --zone=public --add-port=25/tcp --permanent | tee -a monit-install-log && firewall-cmd --zone=public --add-port=25/udp --permanent | tee -a monit-install-log && firewall-cmd --zone=public --add-port=514/tcp --permanent | tee -a monit-install-log && firewall-cmd --zone=public --add-port=514/udp --permanent | tee -a monit-install-log && firewall-cmd --zone=public --add-port=2812/tcp --permanent | tee -a monit-install-log && firewall-cmd --zone=public --add-port=2812/udp --permanent | tee -a monit-install-log && firewall-cmd --reload | tee -a monit-install-log
