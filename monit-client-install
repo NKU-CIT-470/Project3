@@ -17,7 +17,7 @@ yum install monit -y | tee -a monit-install-log
 ## download monitrc config file
 wget https://github.com/NKU-CIT-470/Project3/raw/main/monitrc-client | tee -a monit-install-log
 #Search for string in monitrc and replace it with the server IP then save it over the template
-sed "s/SERVER_IP.*/"$1"/g" monitrc-client > monit-test
+sed "s/SERVER_IP.*/"$1"/g" monitrc-client > /etc/monitrc
 ## restart monit service
 echo "Restart monit service" | tee -a /root/conf-monit-log.txt
 /usr/bin/systemctl start monit
